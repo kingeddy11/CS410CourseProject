@@ -1,1 +1,1 @@
-# CS410CourseProject
+# CS410 Course Project

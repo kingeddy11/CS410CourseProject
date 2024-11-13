@@ -1,0 +1,14 @@
+# Ignore data files
+*.csv
+*.xlsx
+*.txt
+
+# Ignore pdfs
+*.pdf
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Environments
+.env
+.venv

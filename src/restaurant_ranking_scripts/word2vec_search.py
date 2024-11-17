@@ -20,6 +20,11 @@ with open("yelp_reviews_doc_vectors_word2vec.pkl", 'rb') as file:
 
 print("Loading sentiment analysis data...")
 lexicon_sentiment_df = pd.read_csv('../../data/sentiment_analysis/yelp_restaurants_lexicon_sentiment_Phila.csv')
+bert_sentiment_df = pd.read_csv('../../data/sentiment_analysis/yelp_restaurants_bert_sentiment_Phila.csv')
+bert_sentiment_df.columns = ['business_id', 'avg_sentiment_bert', 'weighted_avg_sentiment_bert', 'negative_review_count_bert', 'neutral_review_count_bert', 'positive_review_count_bert']
+
+# Merge sentiment analysis data
+sentiment_df = pd.merge(lexicon_sentiment_df, bert_sentiment_df, on = 'business_id', how = 'inner')
 
 # Initialize lemmatizer
 lemmatizer = WordNetLemmatizer()
@@ -98,22 +103,23 @@ sim_scores_df['norm_sim_score'] = z_score_scaler_sim.fit_transform(sim_scores_df
 # Normalized averaged sentiment scores by calculating z-scores for each variable, averaging the 3 normalized sentiment scores, and then calculating z-scores for the averaged sentiment score;
 # addresses the issue of different scales and distributions of similarity scores and sentiment scores for each of the models and lowers the possibility of one model dominating the weighted score
 z_score_scaler_avg_sentiment = StandardScaler()
-lexicon_sentiment_df[['norm_avg_sentiment_vader', 'norm_avg_sentiment_TextBlob', 'norm_avg_sentiment_sentiwordnet']] = z_score_scaler_avg_sentiment.fit_transform(lexicon_sentiment_df[['avg_sentiment_vader', 'avg_sentiment_TextBlob', 'avg_sentiment_sentiwordnet']])
-lexicon_sentiment_df['norm_avg_sentiment'] = lexicon_sentiment_df[['norm_avg_sentiment_vader', 'norm_avg_sentiment_TextBlob', 'norm_avg_sentiment_sentiwordnet']].mean(axis = 1)
-lexicon_sentiment_df['norm_avg_sentiment'] = z_score_scaler_avg_sentiment.fit_transform(lexicon_sentiment_df['norm_avg_sentiment'].values.reshape(-1, 1))
+sentiment_df[['norm_avg_sentiment_vader', 'norm_avg_sentiment_TextBlob', 'norm_avg_sentiment_sentiwordnet', 'norm_avg_sentiment_bert']] = z_score_scaler_avg_sentiment.fit_transform(sentiment_df[['avg_sentiment_vader', 'avg_sentiment_TextBlob', 'avg_sentiment_sentiwordnet', 'avg_sentiment_bert']])
+sentiment_df['norm_avg_sentiment'] = sentiment_df[['norm_avg_sentiment_vader', 'norm_avg_sentiment_TextBlob', 'norm_avg_sentiment_sentiwordnet', 'norm_avg_sentiment_bert']].mean(axis = 1)
+sentiment_df['norm_avg_sentiment'] = z_score_scaler_avg_sentiment.fit_transform(sentiment_df['norm_avg_sentiment'].values.reshape(-1, 1))
 
 # Normalized weighted averaged sentiment scores by calculating z-scores for each variable, averaging the 3 normalized sentiment scores, and then calculating z-scores for the averaged sentiment score;
 # addresses the issue of different scales and distributions of similarity scores and sentiment scores for each of the models and lowers the possibility of one model dominating the weighted score
 z_score_scaler_wght_avg_sentiment = StandardScaler()
-lexicon_sentiment_df[['norm_wght_avg_sentiment_vader', 'norm_wght_avg_sentiment_TextBlob', 'norm_wght_avg_sentiment_sentiwordnet']] = z_score_scaler_wght_avg_sentiment.fit_transform(lexicon_sentiment_df[['weighted_avg_sentiment_vader', \
+sentiment_df[['norm_wght_avg_sentiment_vader', 'norm_wght_avg_sentiment_TextBlob', 'norm_wght_avg_sentiment_sentiwordnet', 'norm_wght_avg_sentiment_bert']] = z_score_scaler_wght_avg_sentiment.fit_transform(sentiment_df[['weighted_avg_sentiment_vader', \
                                                                                                                                                                                                             'weighted_avg_sentiment_TextBlob', \
-                                                                                                                                                                                                            'weighted_avg_sentiment_sentiwordnet']])
-lexicon_sentiment_df['norm_wght_avg_sentiment'] = lexicon_sentiment_df[['norm_wght_avg_sentiment_vader', 'norm_wght_avg_sentiment_TextBlob', 'norm_wght_avg_sentiment_sentiwordnet']].mean(axis = 1)
-lexicon_sentiment_df['norm_wght_avg_sentiment'] = z_score_scaler_wght_avg_sentiment.fit_transform(lexicon_sentiment_df['norm_wght_avg_sentiment'].values.reshape(-1, 1))
+                                                                                                                                                                                                            'weighted_avg_sentiment_sentiwordnet', \
+                                                                                                                                                                                                            'weighted_avg_sentiment_bert']])
+sentiment_df['norm_wght_avg_sentiment'] = sentiment_df[['norm_wght_avg_sentiment_vader', 'norm_wght_avg_sentiment_TextBlob', 'norm_wght_avg_sentiment_sentiwordnet', 'norm_wght_avg_sentiment_bert']].mean(axis = 1)
+sentiment_df['norm_wght_avg_sentiment'] = z_score_scaler_wght_avg_sentiment.fit_transform(sentiment_df['norm_wght_avg_sentiment'].values.reshape(-1, 1))
 
 
 # Merging scores with sentiment analysis data
-scores_df = pd.merge(sim_scores_df, lexicon_sentiment_df, on= 'business_id', how = 'inner')
+scores_df = pd.merge(sim_scores_df, sentiment_df, on= 'business_id', how = 'inner')
 print('Count of unique business ids', len(scores_df['business_id'].unique())) # Checking to see if all 200 business ids are present after merging
 
 
@@ -123,7 +129,7 @@ print('Count of unique business ids', len(scores_df['business_id'].unique())) # 
 sim_score_wght = 0.8
 
 # Specify whether you want to calculate the weighted score using weighted average sentiment scores or average sentiment scores
-weighted_avg_sentiment = False
+weighted_avg_sentiment = True
 """====================================="""
 
 def calc_weighted_score(row, sim_score_wght = sim_score_wght, weighted_avg_sentiment = weighted_avg_sentiment):
@@ -145,9 +151,11 @@ scores_df['weighted_score'] = scores_df.apply(calc_weighted_score, axis = 1)
 
 # Sort vectors by weighted score in descending order and grab relevant columns depending on whether you are using weighted average sentiment scores or average sentiment scores
 if weighted_avg_sentiment:
-    ranked_weight_scores = scores_df.sort_values(by = 'weighted_score', ascending = False)[['business_id', 'weighted_score', 'sim_score', 'norm_sim_score', 'norm_wght_avg_sentiment', 'norm_wght_avg_sentiment_vader', 'norm_wght_avg_sentiment_TextBlob', 'norm_wght_avg_sentiment_sentiwordnet']]
+    ranked_weight_scores = scores_df.sort_values(by = 'weighted_score', ascending = False)[['business_id', 'weighted_score', 'sim_score', 'norm_sim_score', 'norm_wght_avg_sentiment', \
+                                                                                            'norm_wght_avg_sentiment_vader', 'norm_wght_avg_sentiment_TextBlob', 'norm_wght_avg_sentiment_sentiwordnet', 'norm_wght_avg_sentiment_bert']]
 else:
-    ranked_weight_scores = scores_df.sort_values(by = 'weighted_score', ascending = False)[['business_id', 'weighted_score', 'sim_score', 'norm_sim_score', 'norm_avg_sentiment', 'norm_avg_sentiment_vader', 'norm_avg_sentiment_TextBlob', 'norm_avg_sentiment_sentiwordnet']]
+    ranked_weight_scores = scores_df.sort_values(by = 'weighted_score', ascending = False)[['business_id', 'weighted_score', 'sim_score', 'norm_sim_score', 'norm_avg_sentiment', \
+                                                                                            'norm_avg_sentiment_vader', 'norm_avg_sentiment_TextBlob', 'norm_avg_sentiment_sentiwordnet', 'norm_avg_sentiment_bert']]
 
 # Top 10 business ids with highest weighted score
 ranked_weight_scores_top10 = ranked_weight_scores[:10]

@@ -19,3 +19,18 @@ Our approach and steps are outlined as follows:
 3. Conduct sentiment analysis on all user reviews and compute a sentiment score for each user review. Next, compute the average sentiment score as well as a customized weighted average sentiment score for each restaurant. 4 different sentiment analysis techniques were utilized including 3 lexicon-based methods and 1 transformer-based method.
 4. Implement text retrieval algorithms that calculate a similarity score by comparing the combined user reviews for each restaurant to the user query. We use three different algorithms to compute the similarity score. Next, incorporate the average/weighted average sentiment for each restaurant and calculate a weighted score by weighing both the similarity score and average/weighted average sentiment score. Lastly, sort the restaurants from highest to lowest score and recommend the restaurants with the highest score.
 5. Create an interactive dashboard to host our restaurant recommendation system. This dashboard will enable users to input the type of food they want into a query and select other parameters. The system will then output a ranked list of the top (10/25/50) restaurants based on their preferences.
+
+## Installation
+### Prerequisites ###
+- **Python version:** Python 3.8
+- Git
+- [Anaconda](https://docs.anaconda.com/anaconda/install/windows/)
+
+### Conda Environment
+We use a conda environment called `cs410_course_project` to keep our Python version and packages consistent across all machines. All of the required packages to run the scripts contained in `src` are listed in [requirements.txt](https://github.com/kingeddy11/CS410CourseProject/blob/main/requirements.txt). To install this environment, please use the following commands:
+
+```bash
+conda create -n cs410_course_project python=3.8
+conda activate cs410_course_project
+pip install -r requirements.txt
+```

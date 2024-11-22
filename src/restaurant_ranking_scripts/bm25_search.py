@@ -17,6 +17,9 @@ bert_sentiment_df.columns = ['business_id', 'avg_sentiment_bert', 'weighted_avg_
 # Merge sentiment analysis data
 sentiment_df = pd.merge(lexicon_sentiment_df, bert_sentiment_df, on = 'business_id', how = 'inner')
 
+print("Loading restaurant characteristics data...")
+user_reviews_df = pd.read_csv('../../data/data_cleaning/yelp_restaurants_Phila_final.csv')
+
 # Initalizing stemmer and tokenizer
 ps = PorterStemmer()
 tokenizer = RegexpTokenizer(r'\w+')
@@ -91,17 +94,21 @@ def calc_weighted_score(row, sim_score_wght = sim_score_wght, weighted_avg_senti
 
 scores_df['weighted_score'] = scores_df.apply(calc_weighted_score, axis = 1)
 
-# Sort vectors by weighted score in descending order and grab relevant columns depending on whether you are using weighted average sentiment scores or average sentiment scores
+# Sort vectors by weighted score in descending order, merge in restaurant names, and grab relevant columns depending on whether you are using weighted average sentiment scores or average sentiment scores
 if weighted_avg_sentiment:
-    ranked_weight_scores = scores_df.sort_values(by = 'weighted_score', ascending = False)[['business_id', 'weighted_score', 'sim_score', 'norm_sim_score', 'norm_wght_avg_sentiment', \
-                                                                                            'norm_wght_avg_sentiment_vader', 'norm_wght_avg_sentiment_TextBlob', 'norm_wght_avg_sentiment_sentiwordnet', 'norm_wght_avg_sentiment_bert']]
+    ranked_weight_scores = scores_df.sort_values(by = 'weighted_score', ascending = False)
+    ranked_weight_scores_fin = ranked_weight_scores.merge(user_reviews_df[['business_id', 'restaurant_name']], on = 'business_id', how = 'inner')[['business_id', 'restaurant_name', 'weighted_score', 'sim_score', \
+                                                                                                                                                   'norm_sim_score', 'norm_wght_avg_sentiment', 'norm_wght_avg_sentiment_vader', \
+                                                                                                                                                   'norm_wght_avg_sentiment_TextBlob', 'norm_wght_avg_sentiment_sentiwordnet', 'norm_wght_avg_sentiment_bert']]
 else:
-    ranked_weight_scores = scores_df.sort_values(by = 'weighted_score', ascending = False)[['business_id', 'weighted_score', 'sim_score', 'norm_sim_score', 'norm_avg_sentiment', \
-                                                                                            'norm_avg_sentiment_vader', 'norm_avg_sentiment_TextBlob', 'norm_avg_sentiment_sentiwordnet', 'norm_avg_sentiment_bert']]
+    ranked_weight_scores = scores_df.sort_values(by = 'weighted_score', ascending = False)
+    ranked_weight_scores_fin = ranked_weight_scores.merge(user_reviews_df[['business_id', 'restaurant_name']], on = 'business_id', how = 'inner')[['business_id', 'restaurant_name', 'weighted_score', 'sim_score', 'norm_sim_score', \
+                                                                                                                                                   'norm_avg_sentiment', 'norm_avg_sentiment_vader', 'norm_avg_sentiment_TextBlob', 
+                                                                                                                                                   'norm_avg_sentiment_sentiwordnet', 'norm_avg_sentiment_bert']]
 
 # Top 10 business ids with highest weighted score
-ranked_weight_scores_top10 = ranked_weight_scores[:10]
-print(ranked_weight_scores_top10)
+ranked_weight_scores_fin_top10 = ranked_weight_scores_fin[:10]
+print(ranked_weight_scores_fin_top10)
 
 # Write the results of either weighted average sentiment scores or average sentiment scores to a CSV file
 if weighted_avg_sentiment:

@@ -12,22 +12,22 @@ from sklearn.preprocessing import StandardScaler
 
 print("Loading data...")
 stopwords_english = set(stopwords.words('english'))
-model_path = '../../models/GoogleNews-vectors-negative300.bin'
+model_path = '../models/GoogleNews-vectors-negative300.bin'
 model = KeyedVectors.load_word2vec_format(model_path, binary=True)
 
 with open("yelp_reviews_doc_vectors_word2vec.pkl", 'rb') as file:
     vector_dict = pickle.load(file)
 
 print("Loading sentiment analysis data...")
-lexicon_sentiment_df = pd.read_csv('../../data/sentiment_analysis/yelp_restaurants_lexicon_sentiment_Phila.csv')
-bert_sentiment_df = pd.read_csv('../../data/sentiment_analysis/yelp_restaurants_bert_sentiment_Phila.csv')
+lexicon_sentiment_df = pd.read_csv('../../data/yelp_restaurants_lexicon_sentiment_Phila.csv')
+bert_sentiment_df = pd.read_csv('../../data/yelp_restaurants_bert_sentiment_Phila.csv')
 bert_sentiment_df.columns = ['business_id', 'avg_sentiment_bert', 'weighted_avg_sentiment_bert', 'negative_review_count_bert', 'neutral_review_count_bert', 'positive_review_count_bert']
 
 # Merge sentiment analysis data
 sentiment_df = pd.merge(lexicon_sentiment_df, bert_sentiment_df, on = 'business_id', how = 'inner')
 
 print("Loading restaurant characteristics data...")
-user_reviews_df = pd.read_csv('../../data/data_cleaning/yelp_restaurants_Phila_final.csv')
+user_reviews_df = pd.read_csv('../../data/yelp_restaurants_Phila_final.csv')
 
 # Initialize lemmatizer
 lemmatizer = WordNetLemmatizer()
@@ -132,7 +132,7 @@ print('Count of unique business ids', len(scores_df['business_id'].unique())) # 
 sim_score_wght = 0.8
 
 # Specify whether you want to calculate the weighted score using weighted average sentiment scores or average sentiment scores
-weighted_avg_sentiment = True
+weighted_avg_sentiment = False
 """====================================="""
 
 def calc_weighted_score(row, sim_score_wght = sim_score_wght, weighted_avg_sentiment = weighted_avg_sentiment):
@@ -170,6 +170,6 @@ print(ranked_weight_scores_fin_top10)
 
 # Write the results of either weighted average sentiment scores or average sentiment scores to a CSV file
 if weighted_avg_sentiment:
-    ranked_weight_scores.to_csv(f'../../data/restaurant_rankings_by_query/restaurant_ranking_word2vec_w_avg_sentiment_{QUERY}.csv', index = False)
+    ranked_weight_scores_fin.to_csv(f'../../data/restaurant_ranking_word2vec_w_avg_sentiment_{QUERY}.csv', index = False)
 else:
-    ranked_weight_scores.to_csv(f'../../data/restaurant_rankings_by_query/restaurant_ranking_word2vec_avg_sentiment_{QUERY}.csv', index = False)
+    ranked_weight_scores_fin.to_csv(f'../../data/restaurant_ranking_word2vec_avg_sentiment_{QUERY}.csv', index = False)

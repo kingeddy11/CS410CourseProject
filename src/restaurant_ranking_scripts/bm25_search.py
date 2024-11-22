@@ -112,6 +112,6 @@ print(ranked_weight_scores_fin_top10)
 
 # Write the results of either weighted average sentiment scores or average sentiment scores to a CSV file
 if weighted_avg_sentiment:
-    ranked_weight_scores.to_csv(f'../../data/restaurant_rankings_by_query/restaurant_ranking_bm25_w_avg_sentiment_{QUERY}.csv', index = False)
+    ranked_weight_scores_fin.to_csv(f'../../data/restaurant_rankings_by_query/restaurant_ranking_bm25_w_avg_sentiment_{QUERY}.csv', index = False)
 else:
-    ranked_weight_scores.to_csv(f'../../data/restaurant_rankings_by_query/restaurant_ranking_bm25_avg_sentiment_{QUERY}.csv', index = False)
+    ranked_weight_scores_fin.to_csv(f'../../data/restaurant_rankings_by_query/restaurant_ranking_bm25_avg_sentiment_{QUERY}.csv', index = False)

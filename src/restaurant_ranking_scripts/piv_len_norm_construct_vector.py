@@ -21,7 +21,7 @@ avg_doc_length = np.mean(word_counts)
 # Calculate document length normalizer for each business_id
 for business_id, term_dict in tf.items():
     doc_length = sum(term_dict.values()) # Calculate document length for each business_id
-    doc_length_normalizer[business_id] = (1 - b + b * (doc_length / avg_doc_length))
+    doc_length_normalizer[business_id] = doc_length / avg_doc_length
 
 
 ## Construct document vectors
@@ -31,11 +31,11 @@ for business_id, term_freqs in tf.items():
     doc_vector = []
     for term, freq in term_freqs.items():
         tf_weight = np.log(1 + np.log(1 + freq))
-        weight = (tf_weight / doc_length_normalizer[business_id]) * idf[term]
+        weight = tf_weight * idf[term]
         doc_vector.append((term, weight))
 
     doc_vectors[business_id] = doc_vector
 
 print("Saving files...")
 with open("yelp_reviews_doc_vectors_pln.pkl", 'wb') as file:
-    pickle.dump(doc_vectors, file)
+    pickle.dump((doc_vectors, doc_length_normalizer), file)

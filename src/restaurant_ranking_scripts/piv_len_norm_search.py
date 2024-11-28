@@ -12,7 +12,7 @@ print("Loading data...")
 stopwords_english = set(stopwords.words('english'))
 
 with open("yelp_reviews_doc_vectors_pln.pkl", 'rb') as file:
-    vector_dict = pickle.load(file)
+    vector_dict, doc_length_normalizer = pickle.load(file)
 
 print("Loading sentiment analysis data...")
 lexicon_sentiment_df = pd.read_csv('../../data/sentiment_analysis/yelp_restaurants_lexicon_sentiment_Phila.csv')
@@ -60,16 +60,20 @@ def construct_query_vector(text):
 
 # Input query
 print("Please enter a query: ")
+B = 0.9
 QUERY = input()
 QUERY = QUERY.lower() # convert query to lowercase
 print("Constructing query vector...")
 query_vector = construct_query_vector(QUERY)
 
+# Calculates the doc vector with pivoted length normalization
+def calculate_doc_length_normalization(doc_vector, doc_length_normalized):
+    return doc_vector / (1 - B + B * (doc_length_normalized))
 
 # Function to calculate the dot product to compute similarity between query vector and document vector for each business id
-def calc_dot_product(query_vector, doc_vector):
+def calc_dot_product(query_vector, length_normalized_doc_vector):
     dot_product = 0
-    for term, weight in doc_vector:
+    for term, weight in length_normalized_doc_vector:
         if term in query_vector:
             dot_product += query_vector[term] * weight
     
@@ -81,7 +85,8 @@ def calc_dot_product(query_vector, doc_vector):
 print("Searching...")
 sim_scores = []
 for bid, doc_vector in vector_dict.items():
-    sim_scores.append((bid, calc_dot_product(query_vector, doc_vector)))
+    length_normalized_doc_vector = calculate_doc_length_normalization(doc_vector, doc_length_normalizer[bid])
+    sim_scores.append((bid, calc_dot_product(query_vector, length_normalized_doc_vector)))
 
 sim_scores_df = pd.DataFrame(sim_scores, columns = ['business_id', 'sim_score']) # convert similarity scores to a pandas dataframe
 

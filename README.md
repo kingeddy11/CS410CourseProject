@@ -1,6 +1,7 @@
 # CS410 Course Project: Restaurant Recommendation System in Philadelphia
 
 This repository contains all of the code and information used to build a restaurant recommendation system for restaurants in Philadelphia for our CS410 Course Project. 
+## Software Use
 
 ## Project Overview
 ### Project Description
@@ -134,3 +135,4 @@ BM25 is a ranking algorithm primarily based on TF-IDF. First developed in the 19
 ##### Intermediate files #####
 BM25 pre-processed documents: [`yelp_reviews_preprocess_bm25.py`](https://github.com/kingeddy11/CS410CourseProject/blob/main/src/restaurant_ranking_scripts/yelp_reviews_preprocess_bm25.pkl)
 
+### 4.UI

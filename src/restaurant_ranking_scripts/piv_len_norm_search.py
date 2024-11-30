@@ -68,8 +68,18 @@ query_vector = construct_query_vector(QUERY)
 
 # Calculates the doc vector with pivoted length normalization
 def calculate_doc_length_normalization(doc_vector, doc_length_normalized):
-    return doc_vector / (1 - B + B * (doc_length_normalized))
-
+    normalized_vector = []
+    normalization_factor = (1 - B + B * doc_length_normalized)  # Avoid recalculating
+    
+    for term, weight in doc_vector:
+        if normalization_factor != 0:  # Ensure no division by zero
+            normalized_weight = weight / normalization_factor
+        else:
+            normalized_weight = 0  # Safeguard against zero normalization factors
+        normalized_vector.append((term, normalized_weight))
+    
+    return normalized_vector
+    
 # Function to calculate the dot product to compute similarity between query vector and document vector for each business id
 def calc_dot_product(query_vector, length_normalized_doc_vector):
     dot_product = 0

@@ -133,22 +133,22 @@ def w2c_scoring(query_vector, vector_dict):
 # Main Search Function
 def search_restaurants(query, method="bm25", sim_score_wght=0.8, weighted_avg_sentiment=True, num_results = 10, B = 0.9):
     print("Loading data...")
-    with open("yelp_reviews_preprocess_bm25.pkl", 'rb') as bm25_file:
+    with open("../restaurant_ranking_scripts/yelp_reviews_preprocess_bm25.pkl", 'rb') as bm25_file:
         bm25, business_index = pickle.load(bm25_file)
               
-    with open("yelp_reviews_doc_vectors_pln.pkl", 'rb') as pln_file:
+    with open("../restaurant_ranking_scripts/yelp_reviews_doc_vectors_pln.pkl", 'rb') as pln_file:
         vector_dict, doc_length_normalizer = pickle.load(pln_file)
 
-    with open("yelp_reviews_doc_vectors_word2vec.pkl", 'rb') as file:
+    with open("../restaurant_ranking_scripts/yelp_reviews_doc_vectors_word2vec.pkl", 'rb') as file:
         vector_dict_w2v = pickle.load(file)
 
-    lexicon_sentiment_df = pd.read_csv('../sentiment_analysis/yelp_restaurants_lexicon_sentiment_Phila.csv')
-    bert_sentiment_df = pd.read_csv('../sentiment_analysis/yelp_restaurants_bert_sentiment_Phila.csv')
+    lexicon_sentiment_df = pd.read_csv('../../data/sentiment_analysis/yelp_restaurants_lexicon_sentiment_Phila.csv')
+    bert_sentiment_df = pd.read_csv('../../data/sentiment_analysis/yelp_restaurants_bert_sentiment_Phila.csv')
     bert_sentiment_df.columns = ['business_id', 'avg_sentiment_bert', 'weighted_avg_sentiment_bert', 
                                  'negative_review_count_bert', 'neutral_review_count_bert', 'positive_review_count_bert']
     sentiment_df = pd.merge(lexicon_sentiment_df, bert_sentiment_df, on='business_id', how='inner')
 
-    user_reviews_df = pd.read_csv('../cleaned files/yelp_restaurants_Phila_final.csv')
+    user_reviews_df = pd.read_csv('../../data/data_cleaning/yelp_restaurants_Phila_final.csv')
 
     # Preprocess Query (for pln and bm25)
     query_tokens = preprocess_query(query)

@@ -44,7 +44,17 @@ st.sidebar.markdown(
     unsafe_allow_html=True,
 )
 
-length_normalizer = st.sidebar.slider("Length Normalizer Weight (b)", min_value=0.0, max_value=1.0, value=0.9)
+length_normalizer = st.sidebar.slider("Review Length Normalizer Weight (b)", min_value=0.0, max_value=1.0, value=0.9)
+st.sidebar.markdown(
+    "<small>*Note: Only specify when using bm25 or pln</small>",
+    unsafe_allow_html=True,
+)
+
+tf_normalizer = st.sidebar.slider("Term Frequency Normalizer Weight (k1)", min_value=0.0, max_value=5.0, value=2.0)
+st.sidebar.markdown(
+    "<small>*Note: Only specify when using bm25</small>",
+    unsafe_allow_html=True,
+)
 
 # Sentiment Score Weight Toggle
 weighted_avg_sentiment = st.sidebar.checkbox(
@@ -73,7 +83,8 @@ if st.sidebar.button("Find Restaurants"):
             num_results = top_n,            
             sim_score_wght=sim_score_wght,
             weighted_avg_sentiment=weighted_avg_sentiment,
-            B = length_normalizer
+            B = length_normalizer,
+            k = tf_normalizer
         )
         st.dataframe(
             results.head(top_n).rename(

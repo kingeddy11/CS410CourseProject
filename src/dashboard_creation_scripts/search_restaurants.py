@@ -11,6 +11,7 @@ from nltk import pos_tag
 from nltk.stem import WordNetLemmatizer
 from collections import Counter
 from gensim.models import KeyedVectors
+from rank_bm25 import BM25Okapi
 
 model_path = '../../models/GoogleNews-vectors-negative300.bin'
 model = KeyedVectors.load_word2vec_format(model_path, binary=True)
@@ -28,7 +29,7 @@ def getwordnet_pos(pos):
     else:
         return wn.NOUN  # Default to noun
 
-def preprocess_query(query):
+def preprocess_query_pln(query):
     """Tokenize, stem/lemmatize, and remove stopwords."""
     stopwords_english = set(stopwords.words('english'))
     ps = PorterStemmer()
@@ -42,6 +43,16 @@ def preprocess_query(query):
         lemmatizer.lemmatize(word, getwordnet_pos(pos))
         for word, pos in pos_tags if word not in stopwords_english
     ]
+    return processed_tokens
+
+def preprocess_query_bm25(query):
+    """Tokenize and stem/lemmatize"""
+    # Initalizing stemmer and tokenizer
+    ps = PorterStemmer()
+    tokenizer = RegexpTokenizer(r'\w+')
+
+    # Tokenize and stem query
+    processed_tokens = [ps.stem(w) for w in tokenizer.tokenize(query.lower())]
     return processed_tokens
     
 # Calculates the doc vector with pivoted length normalization
@@ -107,8 +118,9 @@ def construct_query_vector(word_count_dict):
     return weighted_avg_vector
 
 # Retrieval Functions
-def bm25_scoring(tokens, bm25, business_index):
+def bm25_scoring(tokens, corpus, business_index, B = 0.9, k = 2):
     print("Using BM25 scoring...")
+    bm25 = BM25Okapi(corpus, b=B, k1=k)
     scores = bm25.get_scores(tokens)
     descending_indices = np.argsort(scores)[::-1]
     return pd.DataFrame([(business_index[i], scores[i]) for i in descending_indices], columns=['business_id', 'sim_score'])
@@ -131,11 +143,11 @@ def w2c_scoring(query_vector, vector_dict):
     return pd.DataFrame(sim_scores, columns = ['business_id', 'sim_score'])
     
 # Main Search Function
-def search_restaurants(query, method="bm25", sim_score_wght=0.8, weighted_avg_sentiment=True, num_results = 10, B = 0.9):
+def search_restaurants(query, method="bm25", sim_score_wght=0.8, weighted_avg_sentiment=True, num_results = 10, B = 0.9, k = 2):
     print("Loading data...")
     with open("../restaurant_ranking_scripts/yelp_reviews_preprocess_bm25.pkl", 'rb') as bm25_file:
-        bm25, business_index = pickle.load(bm25_file)
-              
+        corpus, business_index = pickle.load(bm25_file)
+
     with open("../restaurant_ranking_scripts/yelp_reviews_doc_vectors_pln.pkl", 'rb') as pln_file:
         vector_dict, doc_length_normalizer = pickle.load(pln_file)
 
@@ -150,21 +162,24 @@ def search_restaurants(query, method="bm25", sim_score_wght=0.8, weighted_avg_se
 
     user_reviews_df = pd.read_csv('../../data/data_cleaning/yelp_restaurants_Phila_final.csv')
 
-    # Preprocess Query (for pln and bm25)
-    query_tokens = preprocess_query(query)
+    # Preprocess Query for pln
+    query_tokens_pln = preprocess_query_pln(query)
+
+    # Preprocess Query for bm25
+    query_tokens_bm25 = preprocess_query_bm25(query)
 
     # Preprocess Query (for word2vec)
     queryv = construct_query_vector(count_words(query))
     
     # Select Retrieval Method
     if method == "bm25":
-        sim_scores_df = bm25_scoring(query_tokens, bm25, business_index)
+        sim_scores_df = bm25_scoring(query_tokens_bm25, corpus, business_index, B, k)
     elif method == "pln":
-        sim_scores_df = pln_scoring(query_tokens, vector_dict, doc_length_normalizer, B)
+        sim_scores_df = pln_scoring(query_tokens_pln, vector_dict, doc_length_normalizer, B)
     elif method == "word2vec":
         sim_scores_df = w2c_scoring(queryv, vector_dict_w2v)
     else:
-        raise ValueError("Invalid method. Choose 'bm25' or 'pln'.")
+        raise ValueError("Invalid method. Choose 'bm25', 'pln', or 'word2vec'.")
     
     # Normalize Scores
     z_score_scaler_sim = StandardScaler()
@@ -216,4 +231,4 @@ if __name__ == "__main__":
         print(top_10.to_string(index=False))
     else:
         print("Usage: python search_restaurants.py '<query>' <method>")
-        print("Method must be 'bm25' or 'pln'.")
+        print("Method must be 'bm25', 'pln', or 'word2vec'.")

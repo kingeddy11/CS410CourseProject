@@ -3,11 +3,12 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import RegexpTokenizer
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import StandardScaler 
+from sklearn.preprocessing import StandardScaler
+from rank_bm25 import BM25Okapi 
 
 print("Loading data...")
 with open("yelp_reviews_preprocess_bm25.pkl", 'rb') as file:
-    bm25, business_index = pickle.load(file)
+    corpus, business_index = pickle.load(file)
 
 print("Loading sentiment analysis data...")
 lexicon_sentiment_df = pd.read_csv('../../data/sentiment_analysis/yelp_restaurants_lexicon_sentiment_Phila.csv')
@@ -32,6 +33,13 @@ QUERY = QUERY.lower() # convert query to lowercase
 # Tokenize and stem the query
 print("Searching...")
 tokenized_query = [ps.stem(w) for w in tokenizer.tokenize(QUERY)]
+
+# Implement BM25 algorithm by specifying hyperparameters
+"""=======Hyperparameters to vary======="""
+b = 0
+k1 = 2
+"""====================================="""
+bm25 = BM25Okapi(corpus, b=b, k1=k1)
 
 # Implement business_id (restaurant) retrieval by computing similarity scores using BM25
 scores = bm25.get_scores(tokenized_query)

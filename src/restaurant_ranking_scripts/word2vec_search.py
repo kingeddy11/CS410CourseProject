@@ -19,15 +19,15 @@ with open("yelp_reviews_doc_vectors_word2vec.pkl", 'rb') as file:
     vector_dict = pickle.load(file)
 
 print("Loading sentiment analysis data...")
-lexicon_sentiment_df = pd.read_csv('../../data/yelp_restaurants_lexicon_sentiment_Phila.csv')
-bert_sentiment_df = pd.read_csv('../../data/yelp_restaurants_bert_sentiment_Phila.csv')
+lexicon_sentiment_df = pd.read_csv('../../data/sentiment_analysis/yelp_restaurants_lexicon_sentiment_Phila.csv')
+bert_sentiment_df = pd.read_csv('../../data/sentiment_analysis/yelp_restaurants_bert_sentiment_Phila.csv')
 bert_sentiment_df.columns = ['business_id', 'avg_sentiment_bert', 'weighted_avg_sentiment_bert', 'negative_review_count_bert', 'neutral_review_count_bert', 'positive_review_count_bert']
 
 # Merge sentiment analysis data
 sentiment_df = pd.merge(lexicon_sentiment_df, bert_sentiment_df, on = 'business_id', how = 'inner')
 
 print("Loading restaurant characteristics data...")
-user_reviews_df = pd.read_csv('../../data/yelp_restaurants_Phila_final.csv')
+user_reviews_df = pd.read_csv('../../data/data_cleaning/yelp_restaurants_Phila_final.csv')
 
 # Initialize lemmatizer
 lemmatizer = WordNetLemmatizer()
@@ -170,6 +170,6 @@ print(ranked_weight_scores_fin_top10)
 
 # Write the results of either weighted average sentiment scores or average sentiment scores to a CSV file
 if weighted_avg_sentiment:
-    ranked_weight_scores_fin.to_csv(f'../../data/restaurant_ranking_word2vec_w_avg_sentiment_{QUERY}.csv', index = False)
+    ranked_weight_scores_fin.to_csv(f'../../data/restaurant_rankings_by_query/restaurant_ranking_word2vec_w_avg_sentiment_{QUERY}.csv', index = False)
 else:
-    ranked_weight_scores_fin.to_csv(f'../../data/restaurant_ranking_word2vec_avg_sentiment_{QUERY}.csv', index = False)
+    ranked_weight_scores_fin.to_csv(f'../../data/restaurant_rankings_by_query/restaurant_ranking_word2vec_avg_sentiment_{QUERY}.csv', index = False)

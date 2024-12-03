@@ -2,7 +2,7 @@
 
 This repository contains all of the code and information used to build a restaurant recommendation system for restaurants in Philadelphia for our CS410 Course Project. 
 ## How to use Software (Restaurant Recommendation Dashboard)
-Dashboard site: (DASHBOARD SITE)
+Dashboard site: (DASHBOARD SITE WILL BE AVAILABLE SOON)
 1.	Start Your Search: Open the dashboard and locate the sidebar for search settings.
 2.	Enter Your Query: Type what you're looking for in the search box, such as "best Italian food."
 3.	Select a Search Method: Choose from BM25, PLN, or Word2Vec to define how the search algorithm ranks results.

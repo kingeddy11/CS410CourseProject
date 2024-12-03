@@ -154,20 +154,8 @@ Two CSV files (a ranking based on the weighted average sentiment score and a ran
 ### 4. User Interface
 The Restaurant Recommendation System is a software designed to help users discover the best dining options in Philadelphia by combining their preferences with sentiment analysis of Yelp reviews. Key features include a Search Box for entering queries (e.g., "best brunch") and selecting a retrieval method such as BM25, Pivoted Length Normalization (PLN), or Word2Vec. Users can customize their experience with Parameter Options, choosing between weighted or simple average sentiment scores, and adjust sentiment influence using a Sentiment Weight Slider ranging from 0 to 1. The software provides Sentiment-Enhanced Rankings, which combine traditional similarity scores with review sentiment, and displays Real-Time Results with ranked restaurants, business IDs, and final scores. Users can also select how many results to display (10, 25, or 50) using Scalable Options. Advanced text processing techniques like tokenization, stemming, and stopword removal, along with lexicon-based and BERT-based sentiment analysis of ~90,000 user reviews for 200 restaurants, ensure accurate, user-focused, and data-driven recommendations.
 The user interface contains two scripts: 
-1.	search_restaurants.py:
-   o	Handles the core search and ranking functionalities of the recommendation system.
-   o	Key Functions:
-   	preprocess_query: Tokenizes, stems/lemmatizes, and removes stopwords from user queries for retrieval.
-   	bm25_scoring, pln_scoring, w2c_scoring: Implement scoring functions for BM25, Pivoted Length Normalization, and Word2Vec retrieval methods.
-   	search_restaurants: The main function that combines query processing, similarity scoring, and sentiment-based ranking to output a ranked list of restaurants.
-   o	Sentiment scores are incorporated into the rankings using a weighted mechanism.
-2.	streamlit_dashboard.py:
-   o	Powers the interactive dashboard built with Streamlit.
-   o	Key Features:
-   	User-friendly widgets for:
-   	Entering queries.
-   	Selecting search methods (BM25, PLN, Word2Vec).
-   	Adjusting sentiment weight and length normalization.
-   	Choosing the number of results to display.
-   o  Integrates with search_restaurants.py to fetch and display ranked results in real-time on the dashboard.
+1. search_restaurants.py
+This script handles the search and ranking process for the recommendation system. It includes functions to preprocess user queries by tokenizing, lemmatizing, and removing stopwords (preprocess_query). The scoring methods for BM25, Pivoted Length Normalization (PLN), and Word2Vec are implemented in bm25_scoring, pln_scoring, and w2c_scoring, respectively. The main function, search_restaurants, combines these retrieval methods with sentiment analysis to rank restaurants based on user input. Sentiment scores are factored into the rankings using a weighted system.
+2. streamlit_dashboard.py
+This script is used to create the interactive dashboard with Streamlit. It provides input fields for user queries, options to select retrieval methods (BM25, PLN, or Word2Vec), and sliders to adjust sentiment weight and normalization parameters. Users can also select how many results to display. The script connects to search_restaurants.py to process the queries and display ranked restaurant recommendations in real-time.
 

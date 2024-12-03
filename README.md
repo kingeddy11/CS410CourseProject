@@ -2,6 +2,16 @@
 
 This repository contains all of the code and information used to build a restaurant recommendation system for restaurants in Philadelphia for our CS410 Course Project. 
 ## How to use Software (Restaurant Recommendation Dashboard)
+Dashboard site: (DASHBOARD SITE)
+1.	Start Your Search: Open the dashboard and locate the sidebar for search settings.
+2.	Enter Your Query: Type what you're looking for in the search box, such as "best Italian food."
+3.	Select a Search Method: Choose from BM25, PLN, or Word2Vec to define how the search algorithm ranks results.
+4.	Adjust Weighting Preferences: Use the Similarity Score Weight slider to control how much emphasis is placed on the relevance of text matches versus sentiment analysis. The sentiment score is the complement of the weighted score (i.e. 1 - similarity_score). The sentiment score and similarity score are used to compute the weighted score. 
+5.	Refine Results with Length Normalization: If you’re using PLN, tweak the Length Normalizer Weight slider to account for variations in document length.
+6.	Choose Sentiment Scoring: Check the box to apply Weighted Average Sentiment Scoring for more nuanced results, or leave it unchecked to use simple averages.
+7.	Set the Number of Results: Decide how many restaurants you’d like to see—10, 25, or 50.
+8.	Find Restaurants: Click the button to generate a list of recommended restaurants based on your settings.
+9.	Review Recommendations: The results will be displayed in a table showing the restaurant names, business IDs, and scores. Adjust your settings to explore different rankings.
 
 ## Project Overview
 ### Project Description
@@ -152,7 +162,7 @@ Two CSV files (a ranking based on the weighted average sentiment score and a ran
 6. **data/restaurant_rankings_by_query/restaurant_ranking_bm25_avg_sentiment_japanese sushi.csv**: This file contains the rankings generated using the bm25 method for computing the similarity score, along with the average sentiment scores that contribute to the overall weighted score used for ranking.
 
 ### 4. User Interface
-The Restaurant Recommendation System is a software designed to help users discover the best dining options in Philadelphia by combining their preferences with sentiment analysis of Yelp reviews. Key features include a Search Box for entering queries (e.g., "best brunch") and selecting a retrieval method such as BM25, Pivoted Length Normalization (PLN), or Word2Vec. Users can customize their experience with Parameter Options, choosing between weighted or simple average sentiment scores, and adjust sentiment influence using a Sentiment Weight Slider ranging from 0 to 1. The software provides Sentiment-Enhanced Rankings, which combine traditional similarity scores with review sentiment, and displays Real-Time Results with ranked restaurants, business IDs, and final scores. Users can also select how many results to display (10, 25, or 50) using Scalable Options. Advanced text processing techniques like tokenization, stemming, and stopword removal, along with lexicon-based and BERT-based sentiment analysis of ~90,000 user reviews for 200 restaurants, ensure accurate, user-focused, and data-driven recommendations.
+The Restaurant Recommendation System is a software designed to help users discover the best dining options in Philadelphia by combining their preferences with sentiment analysis of Yelp reviews. Key features include a Search Box for entering queries (e.g., "best brunch") and selecting a retrieval method such as BM25, Pivoted Length Normalization (PLN), or Word2Vec. Users can customize their experience with Parameter Options, choosing between weighted or simple average sentiment scores, and adjust sentiment influence using a Sentiment Weight Slider ranging from 0 to 1. The software provides Sentiment-Enhanced Rankings, which combine traditional similarity scores with review sentiment, and displays Real-Time Results with ranked restaurants, business IDs, and final scores. Users can also select how many results to display (10, 25, or 50) using Scalable Options. Advanced text processing techniques like tokenization, stemming, and stopword removal, along with lexicon-based and BERT-based sentiment analysis of ~90,000 user reviews for 208 restaurants, ensure accurate, user-focused, and data-driven recommendations.
 The user interface contains two scripts: 
 1. search_restaurants.py
 This script handles the search and ranking process for the recommendation system. It includes functions to preprocess user queries by tokenizing, lemmatizing, and removing stopwords (preprocess_query). The scoring methods for BM25, Pivoted Length Normalization (PLN), and Word2Vec are implemented in bm25_scoring, pln_scoring, and w2c_scoring, respectively. The main function, search_restaurants, combines these retrieval methods with sentiment analysis to rank restaurants based on user input. Sentiment scores are factored into the rankings using a weighted system.

@@ -12,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 
 print("Loading data...")
 stopwords_english = set(stopwords.words('english'))
-model_path = '../models/GoogleNews-vectors-negative300.bin'
+model_path = '../../models/GoogleNews-vectors-negative300.bin'
 model = KeyedVectors.load_word2vec_format(model_path, binary=True)
 
 with open("yelp_reviews_doc_vectors_word2vec.pkl", 'rb') as file:

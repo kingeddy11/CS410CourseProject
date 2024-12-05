@@ -2,7 +2,14 @@
 
 This repository contains all of the code and information used to build a restaurant recommendation system for restaurants in Philadelphia for our CS410 Course Project. 
 ## How to use Software (Restaurant Recommendation Dashboard)
-Dashboard site: (DASHBOARD SITE WILL BE AVAILABLE SOON)
+### How to run and launch the Dashboard
+1. Clone this repository into your own local directory
+2. Create a virtual environment and install all Python packages being used in the software by following the instructions in the [Installation](#installation) section.
+3. 
+4. Navigate and go to the [data](https://drive.google.com/drive/u/4/folders/1SBrhxD7Jwwzv--Ma-U25TZcBS5jFO_lj) folder. 
+5. For our word2vec model, make sure to download [`GoogleNews-vectors-negative300.bin`](https://www.kaggle.com/datasets/adarshsng/googlenewsvectors) and place the downloaded bin file in the newly created `models` folder. We are not able to place the downloaded bin file and upload to Github since the model exceeds the Github file size limit.  
+
+### How to use the Dashboard
 1.	Start Your Search: Open the dashboard and locate the sidebar for search settings.
 2.	Enter Your Query: Type what you're looking for in the search box, such as "best Italian food."
 3.	Select a Search Method: Choose from BM25, Pivoted Length Normalization (PLN), or Word2Vec to define how the search algorithm ranks results.

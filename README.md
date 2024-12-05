@@ -1,6 +1,15 @@
 # CS410 Course Project: Restaurant Recommendation System in Philadelphia
 
-This repository contains all of the code and information used to build and implement a restaurant recommendation system for restaurants in Philadelphia for our CS410 Course Project. 
+This repository contains all of the code and information used to build and implement a restaurant recommendation system for restaurants in Philadelphia for our CS410 Course Project.
+
+## Table of Contents
+1. [How to use Software (Restaurant Recommendation Dashboard)](#how-to-use-software-restaurant-recommendation-dashboard)
+2. [Project Overview](#project-overview)
+3. [Project Outline](#project-outline)
+4. [Installation](#installation)
+5. [Project Folder and File Overview](#project-folder-and-file-overview)
+6. [Project Implementation and Steps](#project-implementation-and-steps)
+
 ## How to use Software (Restaurant Recommendation Dashboard)
 ### How to run and launch the Dashboard
 * Note: We were not able to deploy the app by connecting this Github repo to Streamlit Cloud and using Streamlit Cloud to launch our dashboard due to various file sizes exceeding the Github file size limit. Therefore, please follow these instructions for launching the dashboard.

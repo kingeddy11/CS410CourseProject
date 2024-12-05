@@ -56,7 +56,7 @@ Our approach and steps are outlined as follows:
 
 ## Installation
 ### Prerequisites ###
-- **Python version:** Python 3.8
+- **Python version:** Python 3.9
 - Git
 - [Anaconda](https://docs.anaconda.com/anaconda/install/windows/)
 
@@ -64,7 +64,7 @@ Our approach and steps are outlined as follows:
 We use a conda environment called `cs410_course_project` to keep our Python version and packages consistent across all machines. All of the required packages to run the scripts contained in `src` are listed in [requirements.txt](https://github.com/kingeddy11/CS410CourseProject/blob/main/requirements.txt). To install this environment, please use the following commands:
 
 ```bash
-conda create -n cs410_course_project python=3.8
+conda create -n cs410_course_project python=3.9
 conda activate cs410_course_project
 pip install -r requirements.txt
 ```

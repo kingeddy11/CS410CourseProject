@@ -1,5 +1,5 @@
 import streamlit as st
-st.set_page_config(page_title="Restaurant Finder in Philadelphia, PA", page_icon="🍽️")
+st.set_page_config(page_title="Restaurant Finder in Philadelphia, PA", page_icon="🍽️", layout='wide')
 import nltk
 # nltk.data.path.append("/workspaces/movies-dataset-1/nltk_data")
 # Download necessary datasets
@@ -40,7 +40,7 @@ sim_score_wght = st.sidebar.slider(
     "Similarity Score Weight (α)", min_value=0.0, max_value=1.0, value=0.8
 )
 st.sidebar.markdown(
-    "<small>*Note: sentiment score is the complement of the weighted score (i.e. 1 - similarity_score) and together these two scores are used to compute the weighted score</small>",
+    "<small>*Note: Sentiment score weight is the complement of the similarity score weight (i.e. 1 - similarity score weight) and together these two scores are used to compute the final weighted score</small>",
     unsafe_allow_html=True,
 )
 
@@ -61,7 +61,7 @@ weighted_avg_sentiment = st.sidebar.checkbox(
     "Use Weighted Average Sentiment?", value=True
 )
 st.sidebar.markdown(
-    "<small>*Note: If box is unchecked average sentiment is computed for each restaurant(i.e. business id)</small>",
+    "<small>*Note: If box is unchecked average sentiment is computed for each restaurant (i.e. business id)</small>",
     unsafe_allow_html=True,
 )
 
@@ -90,7 +90,10 @@ if st.sidebar.button("Find Restaurants"):
             results.head(top_n).rename(
                 columns={
                     "restaurant_name": "Restaurant Name",
-                    "weighted_score": "Final Score",
+                    "location": "Address",
+                    "categories": "Categories",
+                    "RestaurantsPriceRange2": "Price Range (1-4)",
+                    "weighted_score": "Final Weighted Score",
                 }
             ),
             use_container_width=True,

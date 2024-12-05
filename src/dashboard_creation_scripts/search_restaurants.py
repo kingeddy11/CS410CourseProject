@@ -13,7 +13,7 @@ from collections import Counter
 from gensim.models import KeyedVectors
 from rank_bm25 import BM25Okapi
 
-model_path = '../../models/GoogleNews-vectors-negative300.bin'
+model_path = '../models/GoogleNews-vectors-negative300.bin'
 model = KeyedVectors.load_word2vec_format(model_path, binary=True)
 
 def getwordnet_pos(pos):
@@ -162,6 +162,9 @@ def search_restaurants(query, method="bm25", sim_score_wght=0.8, weighted_avg_se
 
     user_reviews_df = pd.read_csv('../../data/data_cleaning/yelp_restaurants_Phila_final.csv')
 
+    # Creating a location column in user_reviews_df by concatenating address, city, state, and postal_code
+    user_reviews_df['location'] = user_reviews_df['address'] + ', ' + user_reviews_df['city'] + ', ' + user_reviews_df['state'] + ' ' + user_reviews_df['postal_code'].astype(str)
+
     # Preprocess Query for pln
     query_tokens_pln = preprocess_query_pln(query)
 
@@ -216,7 +219,8 @@ def search_restaurants(query, method="bm25", sim_score_wght=0.8, weighted_avg_se
             
     # Rank and Return Top Results
     ranked_scores = scores_df.sort_values(by='weighted_score', ascending=False)
-    return ranked_scores.merge(user_reviews_df[['business_id', 'restaurant_name']], on='business_id', how='inner')[['business_id', 'restaurant_name', 'weighted_score']].head(num_results)
+    return ranked_scores.merge(user_reviews_df[['business_id', 'restaurant_name', 'location', 'categories', 'RestaurantsPriceRange2']], on='business_id', how='inner') \
+        [['business_id', 'restaurant_name', 'location', 'categories', 'RestaurantsPriceRange2', 'weighted_score']].head(num_results)
 
 
 # CLI Execution

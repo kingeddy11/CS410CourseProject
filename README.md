@@ -28,7 +28,7 @@ pip install -r requirements.txt
 3. Create a `data` folder in the root directory of your cloned repo. Within the newly created `data` folder, create two folders: a `sentiment_analysis` folder and a `data cleaning` folder. Navigate and go to the [`data`](https://drive.google.com/drive/u/4/folders/1SBrhxD7Jwwzv--Ma-U25TZcBS5jFO_lj) folder in the Google Drive. Download and move all files in `data/sentiment_analysis` and `data/data_cleaning` into the newly created `data` directory of your cloned repo.
 4. Move all files in `data/restaurant_rankings_by_query` into the `src/restaurant_ranking_scripts` directory of your cloned repo.
 5. Create a `models` folder in the root directory of your cloned repo. For our word2vec model, make sure to download [`GoogleNews-vectors-negative300.bin`](https://www.kaggle.com/datasets/adarshsng/googlenewsvectors) and place the downloaded bin file in the newly created `models` folder. We are not able to place the downloaded bin file and upload to Github since the model exceeds the Github file size limit.
-6. Open up your preferred IDE (we used VS Code). Inside your IDE, navigate and open the [`streamlit_UI.py` script](https://github.com/kingeddy11/CS410CourseProject/blob/main/src/dashboard_creation_scripts/streamlit_UI.py) in your cloned repo which is located in `src/dashboard_creation_scripts`. At a terminal, make sure you activate the created virtual environment in step 2 and run:
+6. Run the following command to start the streamlit app:
 ```bash
 streamlit run src/dashboard_creation_scripts/streamlit_UI.py
 ```

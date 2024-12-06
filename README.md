@@ -10,17 +10,27 @@ This repository contains all of the code and information used to build and imple
 5. [Project Folder and File Overview](#project-folder-and-file-overview)
 6. [Project Implementation and Steps](#project-implementation-and-steps)
 
-## How to use Software (Restaurant Recommendation Dashboard)
-### How to run and launch the Dashboard
+## How to use the Software (Restaurant Recommendation Dashboard)
+### Prerequisites ###
+- **Python version:** Python 3.9
+- Git
+- [Anaconda](https://docs.anaconda.com/anaconda/install/windows/)
+
+### Installing and Running the Dashboard
 * Note: We were not able to deploy the app by connecting this Github repo to Streamlit Cloud and using Streamlit Cloud to launch our dashboard due to various file sizes exceeding the Github file size limit. Therefore, please follow these instructions for launching the dashboard.
 1. Clone this repository into your own local directory (i.e. `git clone https://github.com/kingeddy11/CS410CourseProject.git`)
-2. Create a virtual environment and install all Python packages being used in the software by following the instructions in the [Installation](#installation) section.
-3. Create a `data` folder in the root directory of your cloned repo. Within the newly created `data` folder, create two folders: a `sentiment_analysis` folder and a `data cleaning` folder. Navigate and go to the [`data`](https://drive.google.com/drive/u/4/folders/1SBrhxD7Jwwzv--Ma-U25TZcBS5jFO_lj) folder in the Google Drive. Next, navigate to the `data/sentiment_analysis` folder in the Google Drive and upload all of the files in this folder to your newly created `data/sentiment_analysis` folder. Afterwards, navigate to the `data/data_cleaning` folder in the Google Drive and upload all of the files in this folder to your newly created `data/data_cleaning` folder in your cloned repo.
-4. Create a `models` folder in the root directory of your cloned repo. For our word2vec model, make sure to download [`GoogleNews-vectors-negative300.bin`](https://www.kaggle.com/datasets/adarshsng/googlenewsvectors) and place the downloaded bin file in the newly created `models` folder. We are not able to place the downloaded bin file and upload to Github since the model exceeds the Github file size limit.
-5. Start from the root directory of your cloned repo and navigate to the `src/restaurant_ranking_scripts` folder. Next, navigate and go to the [`data`](https://drive.google.com/drive/u/4/folders/1SBrhxD7Jwwzv--Ma-U25TZcBS5jFO_lj) folder in the Google Drive. Afterwards, navigate to the `data/restaurant_rankings_by_query` folder in the Google Drive and upload all of the files in this folder to your `src/restaurant_ranking_scripts` folder in your cloned repo.
+2. Create a virtual environment and run the following commands to install all Python package dependencies.
+```bash
+conda create -n cs410_course_project python=3.9
+conda activate cs410_course_project
+pip install -r requirements.txt
+```
+3. Create a `data` folder in the root directory of your cloned repo. Within the newly created `data` folder, create two folders: a `sentiment_analysis` folder and a `data cleaning` folder. Navigate and go to the [`data`](https://drive.google.com/drive/u/4/folders/1SBrhxD7Jwwzv--Ma-U25TZcBS5jFO_lj) folder in the Google Drive. Download and move all files in `data/sentiment_analysis` and `data/data_cleaning` into the newly created `data` directory of your cloned repo.
+4. Move all files in `data/restaurant_rankings_by_query` into the `src/restaurant_ranking_scripts` directory of your cloned repo.
+5. Create a `models` folder in the root directory of your cloned repo. For our word2vec model, make sure to download [`GoogleNews-vectors-negative300.bin`](https://www.kaggle.com/datasets/adarshsng/googlenewsvectors) and place the downloaded bin file in the newly created `models` folder. We are not able to place the downloaded bin file and upload to Github since the model exceeds the Github file size limit.
 6. Open up your preferred IDE (we used VS Code). Inside your IDE, navigate and open the [`streamlit_UI.py` script](https://github.com/kingeddy11/CS410CourseProject/blob/main/src/dashboard_creation_scripts/streamlit_UI.py) in your cloned repo which is located in `src/dashboard_creation_scripts`. At a terminal, make sure you activate the created virtual environment in step 2 and run:
 ```bash
-streamlit run streamlit_UI.py
+streamlit run src/dashboard_creation_scripts/streamlit_UI.py
 ```
 7. This should launch the Restaurant Recommendation Dashboard locally in your browser. Wait for the dashboard to finish fully running (look for the `Running...` symbol to disappear at the top right-hand corner of the dashboard app).
 8. Start exploring our restaurant recommendation system dashboard by following the [How to use the Dashboard](#how-to-use-the-dashboard) section. 

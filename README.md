@@ -17,7 +17,7 @@ This repository contains all of the code and information used to build and imple
 - [Anaconda](https://docs.anaconda.com/anaconda/install/windows/)
 
 ### Installing and Running the Dashboard
-* Note: We were not able to deploy the app by connecting this Github repo to Streamlit Cloud and using Streamlit Cloud to launch our dashboard due to various file sizes exceeding the Github file size limit. Therefore, please follow these instructions for launching the dashboard.
+* Note: We were not able to deploy our app by connecting this Github repo to Streamlit Cloud and using Streamlit Cloud to launch our dashboard due to various file sizes being read in from [`src/dashboard_creation_scripts/search_restaurants.py`](https://github.com/kingeddy11/CS410CourseProject/blob/main/src/dashboard_creation_scripts/search_restaurants.py) and [`src/dashboard_creation_scripts/streamlit_UI.py`](https://github.com/kingeddy11/CS410CourseProject/blob/main/src/dashboard_creation_scripts/streamlit_UI.py) exceeding the Github file size limit. As a result, we weren't able to upload these files in the Github Repo which are necessary to deploy our app. Therefore, please follow these instructions to launch the dashboard.
 1. Clone this repository into your own local directory (i.e. `git clone https://github.com/kingeddy11/CS410CourseProject.git`)
 2. Create a virtual environment and run the following commands to install all Python package dependencies.
 ```bash
